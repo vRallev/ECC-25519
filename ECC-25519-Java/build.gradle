@@ -22,11 +22,35 @@ jar {
     }
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
 //            repository(url: mavenLocal().getUrl())
-            repository(url: "file://" + project.getProperties().get('mvnRepoUrl'))
+                repository(url: "file://" + project.getProperties().get('mvnRepoUrl'))
+            }
         }
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    task javaJavadocs(type: Javadoc) {
+        source = sourceSets.main.allJava
+    }
+
+    task javaJavadocsJar(type: Jar) {
+        classifier = 'javadoc'
+        //noinspection GroovyAssignabilityCheck
+        from javaJavadocs.destinationDir
+    }
+
+    task javaSourcesJar(type: Jar) {
+        classifier = 'sources'
+        //noinspection GroovyAssignabilityCheck
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javaSourcesJar
+        archives javaJavadocsJar
     }
 }
