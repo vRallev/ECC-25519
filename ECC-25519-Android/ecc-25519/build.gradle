@@ -1,0 +1,97 @@
+apply plugin: 'android-library'
+apply plugin: 'maven'
+
+version = '1.0.0'
+group = 'net.vrallev.android.library'
+
+dependencies {
+    androidTestCompile 'com.squareup:fest-android:1.0.8'
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 19
+        versionCode 1
+
+        //noinspection GroovyAssignabilityCheck
+        versionName = version
+
+        ndk {
+            moduleName "ed25519_android"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                def mavenRepositoryUrl
+                if (!project.hasProperty('mvnRepoUrl')) {
+                    println "Settings for mvnRepoUrl are missing/incomplete for ${project.name}"
+                    mavenRepositoryUrl = mavenLocal().getUrl()
+                } else {
+                    mavenRepositoryUrl = project.getProperties().get('mvnRepoUrl')
+                }
+
+//                mavenRepositoryUrl = mavenLocal().getUrl()
+
+                repository(url: mavenRepositoryUrl)
+
+                pom.project {
+                    //noinspection GroovyAssignabilityCheck
+                    name 'Android.Ed25519'
+                    //noinspection GroovyAssignabilityCheck
+                    packaging 'aar'
+                    //noinspection GroovyAssignabilityCheck
+                    description 'A library for Android to use Ed25519 public-key signature.'
+                    url 'https://github.com/dazoe/Android.Ed25519'
+
+                    scm {
+                        url 'scm:git@github.com:dazoe/Android.Ed25519.git'
+                        connection 'scm:git@github.com:dazoe/Android.Ed25519.git'
+                        developerConnection 'scm:git@github.com:dazoe/Android.Ed25519.git'
+                    }
+                }
+            }
+        }
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.allJava
+    }
+
+    task androidJavadocsJar(type: Jar) {
+        classifier = 'javadoc'
+        //noinspection GroovyAssignabilityCheck
+        from androidJavadocs.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        //noinspection GroovyAssignabilityCheck
+        from android.sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives androidSourcesJar
+        archives androidJavadocsJar
+    }
+}

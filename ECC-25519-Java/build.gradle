@@ -1,0 +1,69 @@
+//buildscript {
+//    repositories {
+//        maven { url 'http://repo.springsource.org/plugins-release' }
+//    }
+//    dependencies {
+//        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.1'
+//    }
+//}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+//
+//apply plugin: 'propdeps'
+//apply plugin: 'propdeps-maven'
+//apply plugin: 'propdeps-idea'
+//apply plugin: 'propdeps-eclipse'
+
+sourceCompatibility = 1.7
+
+//version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
+group = 'net.vrallev.java.library'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.10'
+}
+
+//sourceSets {
+//    main {
+//        java {
+//            srcDir 'src/main'
+//        }
+//    }
+//
+//    test {
+//        java {
+//            srcDir 'src'
+//        }
+//    }
+//}
+
+jar {
+    manifest {
+        attributes 'Implementation-Version': version
+    }
+}
+
+//test {
+//    // set heap size for the test JVM(s)
+//    minHeapSize = "128m"
+//    maxHeapSize = "512m"
+//
+//    // set JVM arguments for the test JVM(s)
+//    jvmArgs '-XX:MaxPermSize=256m'
+//}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // repository(url: "file://" + new File(project.projectDir.getParent(), 'mvn-repo' + (version.endsWith('-SNAPSHOT') ? '-snapshot' : '')).getAbsolutePath())
+            repository(url: mavenLocal().getUrl())
+            //repository(url: "file://" + project.getProperties().get('mvnRepoUrl'))
+        }
+    }
+}
