@@ -55,7 +55,7 @@ repositories {
 }
 
 dependencies {
-    compile 'net.vrallev.android.library:ecc-25519:1.0.0' // Android
-    compile 'net.vrallev.java.library:ecc-25519:1.0.0' // JVM
+    compile 'net.vrallev.android.library:ecc-25519:1.0.1' // Android
+    compile 'net.vrallev.java.library:ecc-25519:1.0.1' // JVM
 }
 ```

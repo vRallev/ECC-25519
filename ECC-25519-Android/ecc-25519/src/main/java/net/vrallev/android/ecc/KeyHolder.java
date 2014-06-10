@@ -39,10 +39,9 @@ public class KeyHolder {
             throw new IllegalArgumentException("private key must contain 32 or 64 bytes.");
         }
 
-        privateKey = Arrays.copyOf(privateKey, privateKey.length);
         Curve25519.clamp(privateKey);
 
-        mPrivateKey = privateKey;
+        mPrivateKey = Arrays.copyOf(privateKey, privateKey.length);
 
         mPublicKeyDiffieHellman = new byte[32];
         Curve25519.keygen(mPublicKeyDiffieHellman, null, mPrivateKey);

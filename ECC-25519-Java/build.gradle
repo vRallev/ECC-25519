@@ -4,7 +4,7 @@ apply plugin: 'maven'
 sourceCompatibility = 1.7
 
 //version = '1.0.0-SNAPSHOT'
-version = '1.0.0'
+version = '1.0.1'
 group = 'net.vrallev.java.library'
 
 repositories {

@@ -1,7 +1,7 @@
 apply plugin: 'android-library'
 apply plugin: 'maven'
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'net.vrallev.android.library'
 
 dependencies {
@@ -75,19 +75,18 @@ afterEvaluate { project ->
 
     //noinspection GroovyAssignabilityCheck
     task androidJavadocs(type: Javadoc) {
-        source = android.sourceSets.main.allJava
+        source = android.sourceSets.main
+        classpath += project.files(android.getBootClasspath() .join(File.pathSeparator))
     }
 
     task androidJavadocsJar(type: Jar) {
         classifier = 'javadoc'
-        //noinspection GroovyAssignabilityCheck
         from androidJavadocs.destinationDir
     }
 
     task androidSourcesJar(type: Jar) {
         classifier = 'sources'
-        //noinspection GroovyAssignabilityCheck
-        from android.sourceSets.main.allSource
+        from android.sourceSets.main
     }
 
     artifacts {

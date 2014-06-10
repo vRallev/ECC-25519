@@ -1,11 +1,11 @@
 package net.vrallev.java.ecc;
 
-import djb.Curve25519;
-import krm2.ed25519;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import djb.Curve25519;
+import krm2.ed25519;
 
 /**
  * @author Ralf Wondratschek
@@ -38,10 +38,9 @@ public class KeyHolder {
             throw new IllegalArgumentException("private key must contain 32 or 64 bytes.");
         }
 
-        privateKey = Arrays.copyOf(privateKey, privateKey.length);
         Curve25519.clamp(privateKey);
 
-        mPrivateKey = privateKey;
+        mPrivateKey = Arrays.copyOf(privateKey, privateKey.length);
 
         mPublicKeyDiffieHellman = new byte[32];
         Curve25519.keygen(mPublicKeyDiffieHellman, null, mPrivateKey);
