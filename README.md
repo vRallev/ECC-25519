@@ -1,13 +1,16 @@
 ECC-25519
 =========
 
-This project helps to use elliptic curve cryptography (ECC) with Curve25519 by Daniel J Bernstein. It combines multible libraries.
+This project helps to use elliptic curve cryptography (ECC) with Curve25519 by Daniel J Bernstein. It combines multiple libraries.
 
-All credit goes to following libraries. Please respect their licenses! 
+All credit goes to following libraries. **Please respect their licenses!**
 
 https://github.com/dazoe/Android.Ed25519
+
 https://github.com/krm2/ed25519-java
+
 https://github.com/str4d/ed25519-java/tree/ref10
+
 https://code.google.com/p/curve25519-java/
 
 Usage Android
@@ -34,7 +37,7 @@ Same API like Android, but you have the option to exchange the Ed25519 provider.
 
 The slow version uses this implementation: https://github.com/krm2/ed25519-java
 
-The fast implementation uses this implementation (**warning**: the implementation is not proved to work correctly): https://github.com/str4d/ed25519-java/tree/ref10
+The fast implementation uses this implementation (**WARNING**: the implementation is not proved to work correctly): https://github.com/str4d/ed25519-java/tree/ref10
 
 ```java
 byte[] privateKey = KeyHolder.createPrivateKey("my seed".getBytes());
