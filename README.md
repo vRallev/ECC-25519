@@ -6,13 +6,13 @@ This project helps to use elliptic curve cryptography (ECC) with Curve25519 by D
 All credit goes to following libraries. **Please respect their licenses!**
 
 **Android:**
-	https://github.com/dazoe/Android.Ed25519
-	https://code.google.com/p/curve25519-java/
+* https://github.com/dazoe/Android.Ed25519
+* https://code.google.com/p/curve25519-java/
 
 **Java:**
-	https://github.com/krm2/ed25519-java
-	https://github.com/str4d/ed25519-java/tree/ref10
-	https://code.google.com/p/curve25519-java/
+* https://github.com/krm2/ed25519-java
+* https://github.com/str4d/ed25519-java/tree/ref10
+* https://code.google.com/p/curve25519-java/
 
 Download
 --------
