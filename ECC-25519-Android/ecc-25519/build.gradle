@@ -1,15 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-
-version = '1.0.1'
-group = 'net.vrallev.android.library'
 
 dependencies {
     androidTestCompile 'com.squareup:fest-android:1.0.8'
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 20
     buildToolsVersion "20.0.0"
 
     buildTypes {
@@ -38,60 +34,4 @@ android {
     }
 }
 
-afterEvaluate { project ->
-    uploadArchives {
-        //noinspection GradleMisplacedStatement
-        repositories {
-            mavenDeployer {
-                def mavenRepositoryUrl
-                if (!project.hasProperty('mvnRepoUrl')) {
-                    println "Settings for mvnRepoUrl are missing/incomplete for ${project.name}"
-                    mavenRepositoryUrl = mavenLocal().getUrl()
-                } else {
-                    mavenRepositoryUrl = project.getProperties().get('mvnRepoUrl')
-                }
-
-//                mavenRepositoryUrl = mavenLocal().getUrl()
-
-                repository(url: mavenRepositoryUrl)
-
-                pom.project {
-                    //noinspection GroovyAssignabilityCheck
-                    name 'Android.Ed25519'
-                    //noinspection GroovyAssignabilityCheck
-                    packaging 'aar'
-                    //noinspection GroovyAssignabilityCheck
-                    description 'A library for Android to use Ed25519 public-key signature.'
-                    url 'https://github.com/dazoe/Android.Ed25519'
-
-                    scm {
-                        url 'scm:git@github.com:dazoe/Android.Ed25519.git'
-                        connection 'scm:git@github.com:dazoe/Android.Ed25519.git'
-                        developerConnection 'scm:git@github.com:dazoe/Android.Ed25519.git'
-                    }
-                }
-            }
-        }
-    }
-
-    //noinspection GroovyAssignabilityCheck
-    task androidJavadocs(type: Javadoc) {
-        source = android.sourceSets.main
-        classpath += project.files(android.getBootClasspath() .join(File.pathSeparator))
-    }
-
-    task androidJavadocsJar(type: Jar) {
-        classifier = 'javadoc'
-        from androidJavadocs.destinationDir
-    }
-
-    task androidSourcesJar(type: Jar) {
-        classifier = 'sources'
-        from android.sourceSets.main
-    }
-
-    artifacts {
-        archives androidSourcesJar
-        archives androidJavadocsJar
-    }
-}
+apply from: '../gradle-mvn-push.gradle'

@@ -1,56 +1,20 @@
 apply plugin: 'java'
-apply plugin: 'maven'
 
 sourceCompatibility = 1.7
-
-//version = '1.0.0-SNAPSHOT'
-version = '1.0.1'
-group = 'net.vrallev.java.library'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile 'junit:junit:4.10'
+    testCompile 'junit:junit:4.11'
 }
 
 
 jar {
     manifest {
-        attributes 'Implementation-Version': version
+        attributes 'Implementation-Version': VERSION_NAME
     }
 }
 
-afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-//            repository(url: mavenLocal().getUrl())
-                repository(url: "file://" + project.getProperties().get('mvnRepoUrl'))
-            }
-        }
-    }
-
-    //noinspection GroovyAssignabilityCheck
-    task javaJavadocs(type: Javadoc) {
-        source = sourceSets.main.allJava
-    }
-
-    task javaJavadocsJar(type: Jar) {
-        classifier = 'javadoc'
-        //noinspection GroovyAssignabilityCheck
-        from javaJavadocs.destinationDir
-    }
-
-    task javaSourcesJar(type: Jar) {
-        classifier = 'sources'
-        //noinspection GroovyAssignabilityCheck
-        from sourceSets.main.allSource
-    }
-
-    artifacts {
-        archives javaSourcesJar
-        archives javaJavadocsJar
-    }
-}
+apply from: 'gradle-mvn-push.gradle'

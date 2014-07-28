@@ -5,13 +5,42 @@ This project helps to use elliptic curve cryptography (ECC) with Curve25519 by D
 
 All credit goes to following libraries. **Please respect their licenses!**
 
-https://github.com/dazoe/Android.Ed25519
+**Android:**
+	https://github.com/dazoe/Android.Ed25519
+	https://code.google.com/p/curve25519-java/
 
-https://github.com/krm2/ed25519-java
+**Java:**
+	https://github.com/krm2/ed25519-java
+	https://github.com/str4d/ed25519-java/tree/ref10
+	https://code.google.com/p/curve25519-java/
 
-https://github.com/str4d/ed25519-java/tree/ref10
+Download
+--------
 
-https://code.google.com/p/curve25519-java/
+Grab via Gradle or [Maven][1].
+
+```groovy
+dependencies {
+    compile 'net.vrallev.ecc:ecc-25519-android:1.0.0' 	// Android
+    compile 'net.vrallev.ecc:ecc-25519-java:1.0.0' 		// JVM
+}
+```
+
+```xml
+<dependency>
+    <groupId>net.vrallev.ecc</groupId>
+    <artifactId>ecc-25519-android</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+<!-- OR -->
+
+<dependency>
+    <groupId>net.vrallev.ecc</groupId>
+    <artifactId>ecc-25519-java</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 Usage Android
 -------------
@@ -46,19 +75,19 @@ Ecc25519Helper helper = new Ecc25519Helper(privateKey);
 helper = new Ecc25519HelperFast(privateKey);
 ```
 
-Maven Repo
-----------
+License
+-------
 
-I've uploaded the `.aar` (Android) and `.jar` (Java, JVM) in my maven repository. You only need to add following lines to your `build.gradle` to add the dependency:
-```groovy
-repositories {
-    maven {
-        url 'https://raw.github.com/vRallev/mvn-repo/master/'
-    }
-}
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-dependencies {
-    compile 'net.vrallev.android.library:ecc-25519:1.0.1' // Android
-    compile 'net.vrallev.java.library:ecc-25519:1.0.1' // JVM
-}
-```
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+[1]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22net.vrallev.ecc%22
