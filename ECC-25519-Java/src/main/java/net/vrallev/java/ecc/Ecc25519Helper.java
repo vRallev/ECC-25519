@@ -15,11 +15,20 @@
  */
 package net.vrallev.java.ecc;
 
+import net.i2p.crypto.eddsa.EdDSAEngine;
+import net.i2p.crypto.eddsa.EdDSAPrivateKey;
+import net.i2p.crypto.eddsa.EdDSAPublicKey;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
+import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
+import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
+
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 
 import djb.Curve25519;
-import krm2.ed25519;
 
 /**
  * @author Ralf Wondratschek
@@ -28,10 +37,12 @@ import krm2.ed25519;
 public class Ecc25519Helper {
 
     protected static final MessageDigest MESSAGE_DIGEST_SHA_256;
+    protected static final MessageDigest MESSAGE_DIGEST_SHA_512;
 
     static {
         try {
             MESSAGE_DIGEST_SHA_256 = MessageDigest.getInstance("SHA-256");
+            MESSAGE_DIGEST_SHA_512 = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             // ignore, won't happen
             throw new IllegalStateException(e);
@@ -39,6 +50,7 @@ public class Ecc25519Helper {
     }
 
     private final KeyHolder mKeyHolder;
+    private final EdDSAEngine mEdDSAEngine;
 
     public Ecc25519Helper() {
         this((KeyHolder) null);
@@ -50,6 +62,7 @@ public class Ecc25519Helper {
 
     public Ecc25519Helper(KeyHolder keyHolder) {
         mKeyHolder = keyHolder;
+        mEdDSAEngine = new EdDSAEngine(MESSAGE_DIGEST_SHA_512);
     }
 
     /*
@@ -79,9 +92,15 @@ public class Ecc25519Helper {
 
     public byte[] sign(byte[] message, byte[] privateKey, byte[] publicKey) {
         try {
-            return ed25519.signature(message, privateKey, publicKey);
 
-        } catch (Exception e) {
+            EdDSAPrivateKeySpec edDSAPrivateKeySpec = new EdDSAPrivateKeySpec(privateKey, EdDSANamedCurveTable.getByName("ed25519-sha-512"));
+            mEdDSAEngine.initSign(new EdDSAPrivateKey(edDSAPrivateKeySpec));
+            mEdDSAEngine.update(message);
+            return mEdDSAEngine.sign();
+
+        } catch (InvalidKeyException e) {
+            throw new IllegalArgumentException(e);
+        } catch (SignatureException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -96,7 +115,15 @@ public class Ecc25519Helper {
 
     public boolean isValidSignature(byte[] message, byte[] signature, byte[] publicKey) {
         try {
-            return ed25519.checkvalid(signature, message, publicKey);
+            EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName("ed25519-sha-512");
+
+            EdDSAPublicKeySpec edDSAPublicKeySpec = new EdDSAPublicKeySpec(publicKey, spec);
+            EdDSAPublicKey edDSAPublicKey = new EdDSAPublicKey(edDSAPublicKeySpec);
+
+            mEdDSAEngine.initVerify(edDSAPublicKey);
+            mEdDSAEngine.update(message);
+
+            return mEdDSAEngine.verify(signature);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

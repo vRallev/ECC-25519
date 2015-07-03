@@ -1,9 +1,9 @@
 package net.i2p.crypto.eddsa.math.bigint;
 
+import java.math.BigInteger;
+
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.ScalarOps;
-
-import java.math.BigInteger;
 
 public class BigIntegerScalarOps implements ScalarOps {
     private final BigInteger l;

@@ -15,12 +15,14 @@
  */
 package net.vrallev.java.ecc;
 
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
+import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import djb.Curve25519;
-import krm2.ed25519;
 
 /**
  * @author Ralf Wondratschek
@@ -74,7 +76,8 @@ public class KeyHolder {
     }
 
     protected byte[] computePublicSignatureKey(byte[] privateKey) {
-        return ed25519.publickey(privateKey);
+        EdDSAPrivateKeySpec edDSAPrivateKeySpec = new EdDSAPrivateKeySpec(privateKey, EdDSANamedCurveTable.getByName("ed25519-sha-512"));
+        return edDSAPrivateKeySpec.getA().toByteArray();
     }
 
     public byte[] getPrivateKey() {

@@ -74,7 +74,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
      * implementation fetches the pre-created curve spec from a table.
      * @param curveName the EdDSA named curve.
      * @return the specification for the named curve.
-     * @throws java.security.InvalidAlgorithmParameterException if the named curve is unknown.
+     * @throws InvalidAlgorithmParameterException if the named curve is unknown.
      */
     protected EdDSANamedCurveSpec createNamedCurveSpec(String curveName) throws InvalidAlgorithmParameterException {
         EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName(curveName);
