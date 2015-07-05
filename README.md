@@ -10,14 +10,13 @@ All credit goes to following libraries. **Please respect their licenses!**
 * https://code.google.com/p/curve25519-java/
 
 **Java:**
-* https://github.com/krm2/ed25519-java
-* https://github.com/str4d/ed25519-java/tree/ref10
+* https://github.com/str4d/ed25519-java/
 * https://code.google.com/p/curve25519-java/
 
 Download
 --------
 
-Grab via Gradle or [Maven][1].
+Download [the latest version][1] or grab via Gradle:
 
 ```groovy
 dependencies {
@@ -26,24 +25,8 @@ dependencies {
 }
 ```
 
-```xml
-<dependency>
-    <groupId>net.vrallev.ecc</groupId>
-    <artifactId>ecc-25519-android</artifactId>
-    <version>1.0.0</version>
-</dependency>
-
-<!-- OR -->
-
-<dependency>
-    <groupId>net.vrallev.ecc</groupId>
-    <artifactId>ecc-25519-java</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-Usage Android
--------------
+Usage
+-----
 
 ```java
 byte[] seed = "My random seed".getBytes();
@@ -57,22 +40,6 @@ byte[] sharedSecret = helper.diffieHellman(); // you can also pass a private and
 byte[] message = "My message".getBytes();
 byte[] signature = helper.sign(message); // computes the signature with the private key
 boolean validSignature = helper.isValidSignature(message, signature); // checks the message with the public key from keyHolder instance
-```
-
-Usage Java
-----------
-
-Same API like Android, but you have the option to exchange the Ed25519 provider.
-
-The slow version uses this implementation: https://github.com/krm2/ed25519-java
-
-The fast implementation uses this implementation (**WARNING**: the implementation is not proved to work correctly): https://github.com/str4d/ed25519-java/tree/ref10
-
-```java
-byte[] privateKey = KeyHolder.createPrivateKey("my seed".getBytes());
-Ecc25519Helper helper = new Ecc25519Helper(privateKey);
-// or
-helper = new Ecc25519HelperFast(privateKey);
 ```
 
 License
