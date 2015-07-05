@@ -88,4 +88,25 @@ public class TestEcc255Helper extends AndroidTestCase {
         final byte[] pk2 = new KeyHolder(pk1.clone()).getPrivateKeyUnclamped();
         Assertions.assertThat(pk1).isEqualTo(pk2);
     }
+
+    public void testEcc25519HelperSignClampsParameter() {
+        // if pk1 is not clamped, signature verification will fail.
+        // the .clone() calls are to make sure no other side effects affect the outcome.
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+
+        byte[] sig = new Ecc25519Helper().sign("message".getBytes(), pk1);
+
+        assertTrue((new Ecc25519Helper()).isValidSignature("message".getBytes(), sig, new KeyHolder(pk1.clone()).getPublicKeySignature()));
+    }
+
+    public void testEcc25519HelperSignIsSideEffectFreeOnPrivateKeyParameter() {
+        // ensure that clamping of pk2 is side-effect free.
+        // the .clone() calls are to make sure no other side effects affect the outcome.
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = pk1.clone();
+
+        byte[] sig = new Ecc25519Helper().sign("message".getBytes(), pk2);
+
+        Assertions.assertThat(pk1).isEqualTo(pk2);
+    }
 }

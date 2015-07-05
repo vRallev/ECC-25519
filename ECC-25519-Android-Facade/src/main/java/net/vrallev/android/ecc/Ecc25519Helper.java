@@ -19,6 +19,7 @@ import com.github.dazoe.android.Ed25519;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import djb.Curve25519;
 
@@ -75,10 +76,16 @@ public class Ecc25519Helper {
      */
 
     public byte[] sign(byte[] message) {
-        return sign(message, mKeyHolder.getPrivateKey());
+        return signWithoutClamp(message, mKeyHolder.getPrivateKey());
     }
 
     public byte[] sign(byte[] message, byte[] privateKey) {
+        privateKey = Arrays.copyOf(privateKey, privateKey.length);
+        Curve25519.clamp(privateKey);
+        return signWithoutClamp(message, privateKey);
+    }
+
+    protected byte[] signWithoutClamp(byte[] message, byte[] privateKey) {
         try {
             return Ed25519.Sign(message, privateKey);
 

@@ -27,6 +27,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.Arrays;
 
 import djb.Curve25519;
 
@@ -87,10 +88,16 @@ public class Ecc25519Helper {
      */
 
     public byte[] sign(byte[] message) {
-        return sign(message, mKeyHolder.getPrivateKey(), mKeyHolder.getPublicKeySignature());
+        return signWithoutClamp(message, mKeyHolder.getPrivateKey(), mKeyHolder.getPublicKeySignature());
     }
 
     public byte[] sign(byte[] message, byte[] privateKey, byte[] publicKey) {
+        privateKey = Arrays.copyOf(privateKey, privateKey.length);
+        Curve25519.clamp(privateKey);
+        return signWithoutClamp(message, privateKey, publicKey);
+    }
+
+    protected byte[] signWithoutClamp(byte[] message, byte[] privateKey, byte[] publicKey) {
         try {
 
             EdDSAPrivateKeySpec edDSAPrivateKeySpec = new EdDSAPrivateKeySpec(privateKey, EdDSANamedCurveTable.getByName("ed25519-sha-512"));

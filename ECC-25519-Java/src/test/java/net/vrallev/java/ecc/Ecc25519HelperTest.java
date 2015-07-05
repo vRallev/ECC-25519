@@ -98,4 +98,27 @@ public class Ecc25519HelperTest {
         final byte[] pk2 = new KeyHolder(pk1.clone()).getPrivateKeyUnclamped();
         assertArrayEquals(pk1, pk2);
     }
+
+    @Test
+    public void ecc25519HelperSignClampsParameter() {
+        // if pk1 is not clamped, signature verification will fail.
+        // the .clone() calls are to make sure no other side effects affect the outcome.
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+
+        byte[] sig = new Ecc25519Helper().sign("message".getBytes(), pk1, new KeyHolder(pk1.clone()).getPublicKeySignature());
+
+        assertTrue((new Ecc25519Helper()).isValidSignature("message".getBytes(), sig, new KeyHolder(pk1.clone()).getPublicKeySignature()));
+    }
+
+    @Test
+    public void ecc25519HelperSignIsSideEffectFreeOnPrivateKeyParameter() {
+        // ensure that clamping of pk2 is side-effect free.
+        // the .clone() calls are to make sure no other side effects affect the outcome.
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = pk1.clone();
+
+        byte[] sig = new Ecc25519Helper().sign("message".getBytes(), pk2, new KeyHolder(pk1.clone()).getPublicKeySignature());
+
+        assertArrayEquals(pk1, pk2);
+    }
 }
