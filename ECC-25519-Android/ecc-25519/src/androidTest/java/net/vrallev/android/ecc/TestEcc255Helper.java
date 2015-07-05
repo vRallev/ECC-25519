@@ -17,7 +17,7 @@ package net.vrallev.android.ecc;
 
 import android.test.AndroidTestCase;
 
-import org.fest.assertions.api.Assertions;
+import org.assertj.core.api.Assertions;
 
 import java.security.SecureRandom;
 

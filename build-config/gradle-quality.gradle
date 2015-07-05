@@ -1,0 +1,73 @@
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+check.dependsOn 'checkstyle', 'findbugs', 'pmd'
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${rootProject.rootDir}/../build-config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/djb/**'
+    exclude '**/dazoe/**'
+    exclude '**/krm2/**'
+    exclude '**/eddsa/**'
+
+    classpath = files()
+//
+//    reports {
+//        xml {
+//            destination "$project.buildDir/outputs/checkstyle-results.xml"
+//        }
+//    }
+}
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = new File("${rootProject.rootDir}/../build-config/findbugs/findbugs-filter.xml")
+    classes = files("$project.buildDir/intermediates/classes/")
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+
+        xml {
+            destination "$project.buildDir/reports/findbugs/findbugs.xml"
+            xml.withMessages true
+        }
+        html {
+            destination "$project.buildDir/reports/findbugs/findbugs.html"
+        }
+    }
+
+    classpath = files()
+}
+
+task pmd(type: Pmd) {
+    ruleSetFiles = files("${rootProject.rootDir}/../build-config/pmd/pmd-ruleset.xml")
+    ignoreFailures = true
+    ruleSets = ["java-basic", "java-braces", "java-strings"]
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+
+        xml {
+            destination "$project.buildDir/reports/pmd/pmd.xml"
+        }
+        html {
+            destination "$project.buildDir/reports/pmd/pmd.html"
+        }
+    }
+}

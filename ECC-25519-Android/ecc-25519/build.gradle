@@ -1,27 +1,20 @@
 apply plugin: 'com.android.library'
+apply from: '../../build-config/gradle-quality.gradle'
 
 dependencies {
-    androidTestCompile 'com.squareup:fest-android:1.0.8'
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.0.0'
 }
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
-
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 20
-        versionCode 1
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
 
-        //noinspection GroovyAssignabilityCheck
-        versionName = version
+        versionName project.VERSION_NAME
+        versionCode Integer.parseInt(project.VERSION_CODE)
 
         ndk {
             moduleName "ed25519_android"
@@ -34,4 +27,4 @@ android {
     }
 }
 
-apply from: '../gradle-mvn-push.gradle'
+apply from: '../../build-config/gradle-push.gradle'

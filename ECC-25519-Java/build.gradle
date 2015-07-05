@@ -1,4 +1,5 @@
 apply plugin: 'java'
+//apply from: '../build-config/gradle-quality.gradle'
 
 sourceCompatibility = 1.7
 
@@ -17,4 +18,4 @@ jar {
     }
 }
 
-apply from: 'gradle-mvn-push.gradle'
+apply from: '../build-config/gradle-push-java.gradle'
