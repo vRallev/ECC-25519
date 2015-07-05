@@ -46,6 +46,7 @@ public class KeyHolder {
     }
 
     protected final byte[] mPrivateKey;
+    protected final byte[] mOriginalPrivateKey;
     protected final byte[] mPublicKeyDiffieHellman;
     protected final byte[] mPublicKeySignature;
 
@@ -54,9 +55,10 @@ public class KeyHolder {
             throw new IllegalArgumentException("private key must contain 32 or 64 bytes.");
         }
 
-        Curve25519.clamp(privateKey);
+        mOriginalPrivateKey = Arrays.copyOf(privateKey, privateKey.length);
+        mPrivateKey = Arrays.copyOf(mOriginalPrivateKey, mOriginalPrivateKey.length);
 
-        mPrivateKey = Arrays.copyOf(privateKey, privateKey.length);
+        Curve25519.clamp(mPrivateKey);
 
         mPublicKeyDiffieHellman = new byte[32];
         Curve25519.keygen(mPublicKeyDiffieHellman, null, mPrivateKey);
@@ -70,6 +72,7 @@ public class KeyHolder {
 
     public KeyHolder(byte[] privateKey, byte[] publicKeyDiffieHellman, byte[] publicKeySignature) {
         mPrivateKey = privateKey;
+        mOriginalPrivateKey = privateKey;
         mPublicKeyDiffieHellman = publicKeyDiffieHellman;
         mPublicKeySignature = publicKeySignature;
     }
@@ -84,6 +87,10 @@ public class KeyHolder {
 
     public byte[] getPrivateKey() {
         return mPrivateKey;
+    }
+
+    public byte[] getPrivateKeyUnclamped() {
+        return mOriginalPrivateKey;
     }
 
     public byte[] getPublicKeyDiffieHellman() {

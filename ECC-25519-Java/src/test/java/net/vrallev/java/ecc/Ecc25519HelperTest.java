@@ -83,4 +83,19 @@ public class Ecc25519HelperTest {
             assertTrue(helper2.isValidSignature(message, signature));
         }
     }
+
+    @Test
+    public void keyHolderCTORIsSideEffectFree() {
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = pk1.clone();
+        new KeyHolder(pk2);
+        assertArrayEquals(pk1, pk2);
+    }
+
+    @Test
+    public void keyHolderGetPrivateKeyReturnsUnmodifiedPrivateKey() {
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = new KeyHolder(pk1.clone()).getPrivateKeyUnclamped();
+        assertArrayEquals(pk1, pk2);
+    }
 }

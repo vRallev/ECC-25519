@@ -75,4 +75,17 @@ public class TestEcc255Helper extends AndroidTestCase {
             assertTrue(helper2.isValidSignature(message, signature));
         }
     }
+
+    public void testKeyHolderCTORIsSideEffectFree() {
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = pk1.clone();
+        new KeyHolder(pk2);
+        Assertions.assertThat(pk1).isEqualTo(pk2);
+    }
+
+    public void testKeyHolderGetPrivateKeyReturnsUnmodifiedPrivateKey() {
+        final byte[] pk1 = KeyHolder.createPrivateKey("hello".getBytes());
+        final byte[] pk2 = new KeyHolder(pk1.clone()).getPrivateKeyUnclamped();
+        Assertions.assertThat(pk1).isEqualTo(pk2);
+    }
 }
