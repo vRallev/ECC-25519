@@ -1,30 +1,77 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.model.library'
 apply from: '../../build-config/gradle-quality.gradle'
 
-dependencies {
-    androidTestCompile 'com.squareup.assertj:assertj-android:1.0.0'
-}
+def jniCompileEnabled = true
+def jniLibName = 'ed25519_android'
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        defaultConfig {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = 1
+            versionName = "1.0"
 
-        versionName project.VERSION_NAME
-        versionCode Integer.parseInt(project.VERSION_CODE)
+            buildConfigFields {
+                create() {
+                    type "java.lang.String"
+                    name "JNI_LIB"
+                    value "\"$jniLibName\""
+                }
+            }
+        }
 
-        ndk {
-            moduleName "ed25519_android"
+        compileOptions.with {
+            sourceCompatibility = JavaVersion.VERSION_1_7
+            targetCompatibility = JavaVersion.VERSION_1_7
+        }
+
+        if (jniCompileEnabled) {
+            ndk {
+                moduleName = jniLibName
+
+                toolchain = 'clang'
+                cppFlags.addAll(['-std=c++11', '-Werror', '-Wall', '-fno-exceptions', '-fno-rtti'])
+
+                ldLibs.addAll(['log'])
+                ldFlags.addAll(['-ljnigraphics'])
+
+                //abiFilters.addAll(['armeabi-v7a'])
+            }
+
+            abis {
+                create('armeabi-v7a') {
+                    cppFlags.addAll(['-mhard-float', '-D_NDK_MATH_NO_SOFTFP=1', '-mfloat-abi=hard'])
+                    ldLibs.add('m_hard')
+                    ldFlags.add('-Wl,--no-warn-mismatch')
+                }
+            }
+
+        } else {
+            sources {
+                main {
+                    jniLibs {
+                        source {
+                            srcDirs += 'src/main/jni-precompiled'
+                        }
+                    }
+                }
+            }
         }
     }
+}
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
+dependencies {
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'
+}
+
+task(preCompileLib, type : Copy) {
+    dependsOn assemble
+    into 'src/main/jni-precompiled'
+    from 'build/intermediates/binaries/release/lib'
 }
 
 apply from: '../../build-config/gradle-push.gradle'

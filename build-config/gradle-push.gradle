@@ -101,8 +101,9 @@ afterEvaluate { project ->
 
     task androidJavadocs2(type: Javadoc) {
         failOnError = false
-        source = android.sourceSets.main.java.sourceFiles
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//        source = android.sourceSets.main.java.sourceFiles
+        source = fileTree('src/main/java').include('**/*.java')
+        //classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
 
     task androidJavadocsJar2(type: Jar, dependsOn: androidJavadocs2) {
@@ -114,7 +115,8 @@ afterEvaluate { project ->
     task androidSourcesJar2(type: Jar) {
         classifier = 'sources'
         //basename = artifact_id
-        from android.sourceSets.main.java.sourceFiles
+        from fileTree('src/main/java').include('**/*.java')
+//        from android.sourceSets.main.java.sourceFiles
     }
 
     artifacts {

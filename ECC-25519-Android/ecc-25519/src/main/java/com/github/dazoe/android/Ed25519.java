@@ -2,6 +2,8 @@ package com.github.dazoe.android;
 
 import android.util.Log;
 
+import com.github.dazoe.android.ed25519.BuildConfig;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -58,6 +60,6 @@ public class Ed25519 {
 		return md.digest();
 	}
 	static {
-		System.loadLibrary("ed25519_android");
+		System.loadLibrary(BuildConfig.JNI_LIB);
 	}
 }

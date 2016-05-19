@@ -1,3 +1,7 @@
+## 1.0.2 (2016-05-19)
+
+- Includes net.i2p.crypto.eddsa artifact in java module
+
 ## 1.0.1 (2015-07-05)
 
 Bugfixes:
