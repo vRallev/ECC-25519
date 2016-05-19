@@ -1,3 +1,7 @@
+## 1.0.3 (2016-05-19)
+
+- Don't cache MessageDigest instances to make the code thread safe
+
 ## 1.0.2 (2016-05-19)
 
 - Includes net.i2p.crypto.eddsa artifact in java module

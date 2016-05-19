@@ -37,13 +37,22 @@ import djb.Curve25519;
 @SuppressWarnings("UnusedDeclaration")
 public class Ecc25519Helper {
 
-    protected static final MessageDigest MESSAGE_DIGEST_SHA_256;
-    protected static final MessageDigest MESSAGE_DIGEST_SHA_512;
-
-    static {
+    /*package*/ static MessageDigest getSha256Digest() {
         try {
-            MESSAGE_DIGEST_SHA_256 = MessageDigest.getInstance("SHA-256");
-            MESSAGE_DIGEST_SHA_512 = MessageDigest.getInstance("SHA-512");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            digest.reset();
+            return digest;
+        } catch (NoSuchAlgorithmException e) {
+            // ignore, won't happen
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /*package*/ static MessageDigest getSha512Digest() {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            digest.reset();
+            return digest;
         } catch (NoSuchAlgorithmException e) {
             // ignore, won't happen
             throw new IllegalStateException(e);
@@ -63,7 +72,7 @@ public class Ecc25519Helper {
 
     public Ecc25519Helper(KeyHolder keyHolder) {
         mKeyHolder = keyHolder;
-        mEdDSAEngine = new EdDSAEngine(MESSAGE_DIGEST_SHA_512);
+        mEdDSAEngine = new EdDSAEngine(getSha512Digest());
     }
 
     /*
@@ -79,8 +88,7 @@ public class Ecc25519Helper {
         Curve25519.curve(sharedSecret, privateKey, publicKey);
 
         // see documentation of curve function above
-        MESSAGE_DIGEST_SHA_256.reset();
-        return MESSAGE_DIGEST_SHA_256.digest(sharedSecret);
+        return getSha256Digest().digest(sharedSecret);
     }
 
     /*

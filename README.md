@@ -20,8 +20,8 @@ Download [the latest version][1] or grab via Gradle:
 
 ```groovy
 dependencies {
-    compile 'net.vrallev.ecc:ecc-25519-android:1.0.2' 	// Android
-    compile 'net.vrallev.ecc:ecc-25519-java:1.0.2' 		// JVM
+    compile 'net.vrallev.ecc:ecc-25519-android:1.0.3' 	// Android
+    compile 'net.vrallev.ecc:ecc-25519-java:1.0.3' 		// JVM
 }
 ```
 

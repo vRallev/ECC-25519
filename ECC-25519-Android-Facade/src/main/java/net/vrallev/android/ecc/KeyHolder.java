@@ -17,8 +17,6 @@ package net.vrallev.android.ecc;
 
 import com.github.dazoe.android.Ed25519;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import djb.Curve25519;
@@ -29,20 +27,8 @@ import djb.Curve25519;
 @SuppressWarnings("UnusedDeclaration")
 public class KeyHolder {
 
-    protected static final MessageDigest MESSAGE_DIGEST_SHA_256;
-
-    static {
-        try {
-            MESSAGE_DIGEST_SHA_256 = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            // ignore, won't happen
-            throw new IllegalStateException(e);
-        }
-    }
-
     public static byte[] createPrivateKey(byte[] seed) {
-        MESSAGE_DIGEST_SHA_256.reset();
-        return MESSAGE_DIGEST_SHA_256.digest(seed);
+        return Ecc25519Helper.getSha256Digest().digest(seed);
     }
 
     protected final byte[] mPrivateKey;
