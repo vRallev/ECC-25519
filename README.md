@@ -2,10 +2,10 @@
 ### This project is not maintained anymore.
 
 
-ECC-25519
+~~ECC-25519~~
 =========
 
-This project helps to use elliptic curve cryptography (ECC) with Curve25519 by Daniel J Bernstein. It combines multiple libraries.
+~~This project helps to use elliptic curve cryptography (ECC) with Curve25519 by Daniel J Bernstein. It combines multiple libraries.~~
 
 All credit goes to following libraries. **Please respect their licenses!**
 
