@@ -1,8 +1,9 @@
+# Deprecated
+### This project is not maintained anymore.
+
+
 ECC-25519
 =========
-
-#Deprecated
-## This project is not maintained anymore.
 
 This project helps to use elliptic curve cryptography (ECC) with Curve25519 by Daniel J Bernstein. It combines multiple libraries.
 
